@@ -1,0 +1,5 @@
+cron:
+- description: scheduled bots
+  url: /feedbot
+  target: feedbot
+  schedule: every 60 minutes

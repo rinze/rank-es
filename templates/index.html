@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<link rel="stylesheet" type="text/css" href="styles/style.css" />
+		<meta http-equiv="Content-type" content="text/html;charset=utf-8">		
+		<title>rank-es</title>
+		
+		<!-- Google Analytics -->
+		<script type="text/javascript">
+
+	  		 var _gaq = _gaq || [];
+	  		 _gaq.push(['_setAccount', 'UA-106085-8']);
+	 		 _gaq.push(['_trackPageview']);
+	
+	 		 (function() {
+	 		   var ga = document.createElement('script'); 
+	 		   ga.type = 'text/javascript'; 
+	 		   ga.async = true;
+	 		   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+	 		   var s = document.getElementsByTagName('script')[0]; 
+	 		   s.parentNode.insertBefore(ga, s);
+	 		 })();
+
+		</script>
+		<!-- End Google Analytics -->
+	</head>
+	
+	<body>
+	<h1>rank-es</h1>
+		<div class="column">
+		<h2>¿Esto qué es?</h2>
+		<p>
+		Esto es una prueba de concepto: ¿cómo sería 
+		<a href="http://www.meneame.net">meneame.net</a> si se le quitan
+		los votos de los usuarios?
+		</p>
+		<p>
+		<em>rank-es</em> extrae los enlaces del RSS de menéame (tanto de las
+		noticias en portada como de las que se acaban de enviar a la cola)
+		y les asigna una puntuación que depende exclusivamente de los datos
+		de compartición obtenidos de <a href="http://facebook.com">Facebook</a>
+		y <a href="http://www.twitter.com">Twitter</a>. Después de todo,
+		es ahí donde la mayoría de la gente comparte los enlaces que encuentra.
+		</p>
+		
+		<p>
+		La caja de entrada de texto de la parte superior permite añadir al 
+		sistema direcciones de manera individual, para no depender únicamente
+		de los usuarios de menéame.
+		</p>
+		
+		<p>
+		La puntuación de los enlaces decrece de forma lineal a medida que 
+		<em>envejecen</em>. Pasadas 24 horas se retiran de la base de datos
+		y pasan una agradable jubilación en los Cayos de Florida. La página 
+		se actualiza con nuevos enlaces y nuevas puntuaciones cada hora o 
+		cada vez que se añade un enlace a través del formulario.
+		</p>
+		
+		<p>
+		<em>Powered by 
+		<a href="https://developers.google.com/appengine/">Google App Engine</a></em> en
+		su versión gratuita. No le pidan peras al olmo. Esto está en pruebas.
+		Puede fallar más que una escopeta de feria. El código se
+		encuentra disponible en 
+		<a href="https://github.com/rinze/rank-es/">github</a>.		
+		</p>
+		</div>
+
+        <div class="main">
+            <form method="get">		
+                <label class="url_helper">Introduce una nueva URL a seguir y pulsa
+                <em>enter</em>. Ya nos hacemos nosotros cargo desde ahí:
+                <input type="text" name="url" onClick="this.select()" 
+                           value="{{ url }}" class="url" style="width:99%">
+                </label>	
+            </form>
+            
+            {% if url %}
+            <p>
+            <strong>Facebook:</strong> <span class="score">{{ fb }}</span><br>
+            <strong>Twitter:</strong> <span class="score">{{ tw }}</span><br>
+            </p>
+            <p>
+            <strong>Total:</strong> <span class="score">{{ global }}</span>
+            </p>
+            {% endif %}
+
+            {% for l in links %}
+            <div class="link">
+            	<div class="link_score">
+            	{{ l.score }}<br>
+            	<div class="link_social">
+            	<a href="http://twitter.com/home?status={{ l.q_title + '+' + l.url}}" 
+            					target="_blank">+t</a> 
+            			<a href="http://www.facebook.com/sharer.php?u={{ l.url }}" 
+            					target="_blank">+f</a>
+            	</div>
+            	</div> 
+            	<div class="link_data">
+            		
+            		<div class="link_title">
+            		<a href="{{ l.url }}">{{ l.title }}</a><br>
+						<span class="link_url">{{ l.s_url }}</span>
+					</div>
+					
+            	</div>
+            </div>
+            {% endfor %}
+            
+        </div>
+        
+	</body>
+</html>
