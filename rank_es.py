@@ -5,7 +5,7 @@ from scores import get_score
 from google.appengine.api import memcache
 from rankdb import url_in_db, insert_new_link
 from rankgenerator import generate_main_page
-from rankparser import get_title, fix_url
+from rankparser import get_title, fix_url, correct_url
 
 class InstantPage(webapp2.RequestHandler):
     '''Class that handles instant queries'''
@@ -31,7 +31,7 @@ class MainPage(webapp2.RequestHandler):
             # Insert new link into database and regenerate front page
             # Check if link already in database (current and old)
             url = fix_url(url)
-            if not url_in_db(url):                
+            if not url_in_db(url) and correct_url(url):                
                 title = get_title(url)
                 logging.info('New link inserted from front page: %s' % url)
                 insert_new_link(url, title)     # Insert link into database

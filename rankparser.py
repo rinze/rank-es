@@ -13,9 +13,9 @@ def get_meneame(url):
 def fix_url(url):
     '''Avoid URLs that don't begin with http(s)://'''
     if not url.startswith('http://') and not url.startswith('https://'):
-        return 'http://' + url
+        return 'http://' + url.lower()
     else:
-        return url
+        return url.lower()
 
 def get_title(url):
     '''Returns the title for the given url, or the url
@@ -53,4 +53,12 @@ def get_title(url):
             return HTMLParser.HTMLParser().unescape(title)
     except:
         return url
-    
+   
+def correct_url(url):
+    '''Returns True if the URL defines a valid site'''
+    if url.count('/') > 3:
+        return True
+    elif url.count('/') == 3 and url[-1] != '/':
+        return True
+    else:
+        return False
