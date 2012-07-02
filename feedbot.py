@@ -82,8 +82,10 @@ class FeedBot(webapp2.RequestHandler):
         
 
 # TODO: this bot should publish, at regular intervals, the most relevant
-# news, either on the front page or on any of the categories.
+# news, either from the front page or from any of the categories.
+# Further database tweaking may be needed.
 # For now, let's just write a reminder that this shall be done.
+# The Twitter account rank_es has been reserved for this purpose (by @rinze).
 class TwitterBot():
     pass
    
