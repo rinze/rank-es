@@ -1904,11 +1904,11 @@ class _BaseHTMLProcessor(sgmllib.SGMLParser):
     # they're declared above, not as they're declared in sgmllib.
     def goahead(self, i):
         pass
-    goahead.func_code = sgmllib.SGMLParser.goahead.func_code
+    goahead.func_code = sgmllib.SGMLParser.goahead.func_code #@UndefinedVariable
 
     def __parse_starttag(self, i):
         pass
-    __parse_starttag.func_code = sgmllib.SGMLParser.parse_starttag.func_code
+    __parse_starttag.func_code = sgmllib.SGMLParser.parse_starttag.func_code #@UndefinedVariable
 
     def parse_starttag(self,i):
         j = self.__parse_starttag(i)
@@ -2870,12 +2870,12 @@ def _sanitizeHTML(htmlSource, encoding, _type):
         for tidy_interface in PREFERRED_TIDY_INTERFACES:
             try:
                 if tidy_interface == "uTidy":
-                    from tidy import parseString as _utidy
+                    from tidy import parseString as _utidy #@UnresolvedImport
                     def _tidy(data, **kwargs):
                         return str(_utidy(data, **kwargs))
                     break
                 elif tidy_interface == "mxTidy":
-                    from mx.Tidy import Tidy as _mxtidy
+                    from mx.Tidy import Tidy as _mxtidy #@UnresolvedImport
                     def _tidy(data, **kwargs):
                         nerrors, nwarnings, data, errordata = _mxtidy.tidy(data, **kwargs)
                         return data
