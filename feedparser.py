@@ -2046,7 +2046,7 @@ class _BaseHTMLProcessor(sgmllib.SGMLParser):
         return '&%s;' % name
 
     def output(self):
-        '''Return processed HTML as a single string'''
+        """Return processed HTML as a single string"""
         return ''.join([str(p) for p in self.pieces])
 
     def parse_declaration(self, i):
@@ -3091,7 +3091,7 @@ def _build_urllib2_request(url, agent, etag, modified, referrer, auth, request_h
 
 _date_handlers = []
 def registerDateHandler(func):
-    '''Register a date handler function (takes string, returns 9-tuple date in GMT)'''
+    """Register a date handler function (takes string, returns 9-tuple date in GMT)"""
     _date_handlers.insert(0, func)
 
 # ISO-8601 date parsing routines written by Fazal Majid.
@@ -3132,7 +3132,7 @@ try:
 except NameError:
     pass
 def _parse_date_iso8601(dateString):
-    '''Parse a variety of ISO-8601-compatible formats like 20040105'''
+    """Parse a variety of ISO-8601-compatible formats like 20040105"""
     m = None
     for _iso8601_match in _iso8601_matches:
         m = _iso8601_match(dateString)
@@ -3224,7 +3224,7 @@ _korean_nate_date_re = \
     re.compile(u'(\d{4})-(\d{2})-(\d{2})\s+(%s|%s)\s+(\d{,2}):(\d{,2}):(\d{,2})' % \
                (_korean_am, _korean_pm))
 def _parse_date_onblog(dateString):
-    '''Parse a string according to the OnBlog 8-bit date format'''
+    """Parse a string according to the OnBlog 8-bit date format"""
     m = _korean_onblog_date_re.match(dateString)
     if not m:
         return
@@ -3236,7 +3236,7 @@ def _parse_date_onblog(dateString):
 registerDateHandler(_parse_date_onblog)
 
 def _parse_date_nate(dateString):
-    '''Parse a string according to the Nate 8-bit date format'''
+    """Parse a string according to the Nate 8-bit date format"""
     m = _korean_nate_date_re.match(dateString)
     if not m:
         return
@@ -3293,7 +3293,7 @@ _greek_date_format_re = \
     re.compile(u'([^,]+),\s+(\d{2})\s+([^\s]+)\s+(\d{4})\s+(\d{2}):(\d{2}):(\d{2})\s+([^\s]+)')
 
 def _parse_date_greek(dateString):
-    '''Parse a string according to a Greek 8-bit date format.'''
+    """Parse a string according to a Greek 8-bit date format."""
     m = _greek_date_format_re.match(dateString)
     if not m:
         return
@@ -3327,7 +3327,7 @@ _hungarian_date_format_re = \
   re.compile(u'(\d{4})-([^-]+)-(\d{,2})T(\d{,2}):(\d{2})((\+|-)(\d{,2}:\d{2}))')
 
 def _parse_date_hungarian(dateString):
-    '''Parse a string according to a Hungarian 8-bit date format.'''
+    """Parse a string according to a Hungarian 8-bit date format."""
     m = _hungarian_date_format_re.match(dateString)
     if not m or m.group(2) not in _hungarian_months:
         return None
@@ -3410,7 +3410,7 @@ def _parse_date_w3dtf(dateString):
         return hours, minutes, seconds
 
     def __extract_tzd(m):
-        '''Return the Time Zone Designator as an offset in seconds from UTC.'''
+        """Return the Time Zone Designator as an offset in seconds from UTC."""
         if not m:
             return 0
         tzd = m.group('tzd')
@@ -3551,7 +3551,7 @@ def _parse_date_perforce(aDateString):
 registerDateHandler(_parse_date_perforce)
 
 def _parse_date(dateString):
-    '''Parses a variety of date formats into a 9-tuple in GMT'''
+    """Parses a variety of date formats into a 9-tuple in GMT"""
     if not dateString:
         return None
     for handler in _date_handlers:
@@ -3567,7 +3567,7 @@ def _parse_date(dateString):
     return None
 
 def _getCharacterEncoding(http_headers, xml_data):
-    '''Get the character encoding of the XML document
+    """Get the character encoding of the XML document
 
     http_headers is a dictionary
     xml_data is a raw string (not Unicode)
@@ -3612,15 +3612,15 @@ def _getCharacterEncoding(http_headers, xml_data):
     correctly, which many are not).  iconv_codec can help a lot;
     you should definitely install it if you can.
     http://cjkpython.i18n.org/
-    '''
+    """
 
     def _parseHTTPContentType(content_type):
-        '''takes HTTP Content-Type header and returns (content type, charset)
+        """takes HTTP Content-Type header and returns (content type, charset)
 
         If no charset is specified, returns (content type, '')
         If no content type is specified, returns ('', '')
         Both return parameters are guaranteed to be lowercase strings
-        '''
+        """
         content_type = content_type or ''
         content_type, params = cgi.parse_header(content_type)
         charset = params.get('charset', '').replace("'", "")
@@ -3716,11 +3716,11 @@ def _getCharacterEncoding(http_headers, xml_data):
     return true_encoding, http_encoding, xml_encoding, sniffed_xml_encoding, acceptable_content_type
 
 def _toUTF8(data, encoding):
-    '''Changes an XML data stream on the fly to specify a new encoding
+    """Changes an XML data stream on the fly to specify a new encoding
 
     data is a raw sequence of bytes (not Unicode) that is presumed to be in %encoding already
     encoding is a string recognized by encodings.aliases
-    '''
+    """
     # strip Byte Order Mark (if present)
     if (len(data) >= 4) and (data[:2] == _l2bytes([0xfe, 0xff])) and (data[2:4] != _l2bytes([0x00, 0x00])):
         encoding = 'utf-16be'
@@ -3747,11 +3747,11 @@ def _toUTF8(data, encoding):
     return newdata.encode('utf-8')
 
 def _stripDoctype(data):
-    '''Strips DOCTYPE from XML document, returns (rss_version, stripped_data)
+    """Strips DOCTYPE from XML document, returns (rss_version, stripped_data)
 
     rss_version may be 'rss091n' or None
     stripped_data is the same XML document, minus the DOCTYPE
-    '''
+    """
     start = re.search(_s2bytes('<\w'), data)
     start = start and start.start() or -1
     head,data = data[:start+1], data[start+1:]
@@ -3779,11 +3779,11 @@ def _stripDoctype(data):
     return version, data, dict(replacement and [(k.decode('utf-8'), v.decode('utf-8')) for k, v in safe_pattern.findall(replacement)])
 
 def parse(url_file_stream_or_string, etag=None, modified=None, agent=None, referrer=None, handlers=None, request_headers=None, response_headers=None):
-    '''Parse a feed from a URL, file, stream, or string.
+    """Parse a feed from a URL, file, stream, or string.
 
     request_headers, if given, is a dict from http header name to value to add
     to the request; this overrides internally generated values.
-    '''
+    """
 
     if handlers is None:
         handlers = []

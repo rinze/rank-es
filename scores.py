@@ -6,17 +6,17 @@ from rankparser import fix_url
 from rankconfig import cfg_link_expiration_seconds, cfg_link_fresh
 
 def get_score_modifier(seconds):
-    '''Returns a linear score modifier,
+    """Returns a linear score modifier,
      that depends on how old a link is
      
-     '''
+     """
     if seconds < cfg_link_fresh:
         return 1.0
     else:
         return (cfg_link_expiration_seconds - seconds + cfg_link_fresh)/float(cfg_link_expiration_seconds)
     
 def get_score(url):
-    '''Returns the global score'''
+    """Returns the global score"""
 
     # Fix the URL and quote it
     try:
@@ -33,10 +33,10 @@ def get_score(url):
     return fb+tw, scores
 
 def get_fb_score(url):
-    '''Returns Facebook score for the given URL.
+    """Returns Facebook score for the given URL.
     Please note: http://stackoverflow.com/questions/5699270/how-to-get-share-counts-using-graph-api
     
-    '''
+    """
     
     try:
         fb_url = 'http://graph.facebook.com/' + url
@@ -50,7 +50,7 @@ def get_fb_score(url):
         return 0
 
 def get_tw_score(url):
-    '''Returns Twitter score for the given URL '''
+    """Returns Twitter score for the given URL """
     
     try:
         tw_url = 'http://urls.api.twitter.com/1/urls/count.json?url=' \

@@ -6,7 +6,7 @@ from rankdb import get_top_links
 from rankconfig import cfg_links_front_page
 
 def generate_main_page(template_values={}):
-    '''Generates the main page HTML and memcaches it'''
+    """"Generates the main page HTML and memcaches it"""
     
     c = get_top_links(cfg_links_front_page)
     links = [{'url':x.url, 'title':x.title, 'score': x.score,
@@ -22,7 +22,7 @@ def generate_main_page(template_values={}):
     return page
 
 def shortened_url(url, truncate=50):
-    '''Just for esthetic purposes'''
+    """Just for esthetic purposes"""
     if len(url) > truncate:
         return url[:truncate] + '...'
     else:

@@ -12,12 +12,12 @@ from rankconfig import cfg_links_front_page, cfg_link_expiration_seconds
 class FeedBot(webapp2.RequestHandler):
     
     def get(self):
-        '''
+        """
         1 - Remove expired links
         2 - Gets new items from meneame.net and includes them in the database
         3 - Update scores for already existing links
         
-        '''
+        """
         
         # Remove expired links
         today = datetime.today()                

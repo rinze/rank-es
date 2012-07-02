@@ -5,32 +5,32 @@ from scores import get_score, get_score_modifier
 from rankparser import get_title 
 
 class LinkEnt(db.Model):
-    '''Link model.
+    """Link model.
     LinkEnt consists of:
     - title: Page title
     - url: URL
     - score: Score as given by get_score()[0]
     - date: Insertion date
     
-    '''
+    """
     title = db.StringProperty(required=True)
     url = db.StringProperty(required=True)
     score = db.IntegerProperty(required=True)
     date = db.DateTimeProperty(auto_now_add=True)
 
 class OldLinkEnt(db.Model):
-    '''OldLink database used to store expired links
+    """OldLink database used to store expired links
     and depopulate the main database. When a link has expired,
     only the url is needed.
     
-    '''
+    """
     url = db.StringProperty(required=True)
 
 def update_links(c, links, current_time):
-    '''Updates the LinkEnt database with the current scores.
+    """Updates the LinkEnt database with the current scores.
     The links to be updated are a GQL query passed as argument (c).
     
-    '''
+    """
     
     l = [x[0] for x in links]
     for e in c:
@@ -44,7 +44,7 @@ def update_links(c, links, current_time):
             e.put()
 
 def get_top_links(n, update=False):
-    '''Returns the n top links'''
+    """Returns the n top links"""
     c = memcache.get('toplinks%d' % n)   #@UndefinedVariable
     if not update and c:
         return c
@@ -57,9 +57,9 @@ def get_top_links(n, update=False):
         return c
 
 def insert_new_link(url, title=None, log=False):
-    '''Inserts a new LinkEnt into the datastore. If no title is
+    """Inserts a new LinkEnt into the datastore. If no title is
     provided, get_title() will be called to find it.
-    '''
+    """
     if not title:
         title = get_title(url)
     score = get_score(url)
@@ -70,11 +70,11 @@ def insert_new_link(url, title=None, log=False):
     le.put()
 
 def delete_links(cursor):
-    '''Deletes all the links within the current cursor and stores them
+    """Deletes all the links within the current cursor and stores them
     in OldLinkEnt
     Returns number of deleted links
     
-    '''
+    """
     expired_links = 0
     for e in cursor:
         ol = OldLinkEnt(url=e.url)
@@ -84,10 +84,10 @@ def delete_links(cursor):
     return expired_links
     
 def url_in_db(url):
-    '''Returns True if the url is already in one of the Links databases,
+    """Returns True if the url is already in one of the Links databases,
     False otherwise
     
-    '''
+    """
     c = db.GqlQuery('SELECT * FROM LinkEnt WHERE url = :1', url)
     n1 = c.get()
     c = db.GqlQuery('SELECT * FROM OldLinkEnt WHERE url = :1', url)

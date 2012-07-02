@@ -5,23 +5,23 @@ import HTMLParser
 import urllib2
     
 def get_meneame(url):
-    '''Get links from meneame.net using special names'''
+    """Get links from meneame.net using special names"""
     d = feedparser.parse(url)
     result = [(e['meneame_url'], e['title']) for e in d['entries']]
     return result
 
 def fix_url(url):
-    '''Avoid URLs that don't begin with http(s)://'''
+    """Avoid URLs that don't begin with http(s)://"""
     if not url.startswith('http://') and not url.startswith('https://'):
         return 'http://' + url.lower()
     else:
         return url.lower()
 
 def get_title(url):
-    '''Returns the title for the given url, or the url
+    """Returns the title for the given url, or the url
     if no title is found
     
-    '''
+    """
     
     # TODO: perhaps^W re.compile is not the optimal way to do this
     # HTMLParser would be a better choice.
@@ -55,7 +55,7 @@ def get_title(url):
         return url
    
 def correct_url(url):
-    '''Returns True if the URL defines a valid site'''
+    """Returns True if the URL defines a valid site"""
     if url.count('/') > 3:
         return True
     elif url.count('/') == 3 and url[-1] != '/':

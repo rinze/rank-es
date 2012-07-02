@@ -8,7 +8,7 @@ from rankgenerator import generate_main_page
 from rankparser import get_title, fix_url, correct_url
 
 class InstantPage(webapp2.RequestHandler):
-    '''Class that handles instant queries'''
+    """Class that handles instant queries"""
     def get(self):
         url = self.request.get('url')
         if not url or url == '':
