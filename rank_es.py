@@ -31,13 +31,16 @@ class MainPage(webapp2.RequestHandler):
             # Insert new link into database and regenerate front page
             # Check if link already in database (current and old)
             url = fix_url(url)
-            if not url_in_db(url) and correct_url(url):                
+            cor = correct_url(url)
+            if not url_in_db(url) and cor:
                 title = get_title(url)
                 logging.info('New link inserted from front page: %s' % url)
                 insert_new_link(url, title)     # Insert link into database
                 generate_main_page()            # Generate main page    
                 # TODO: a bit of feedback wouldn't hurt.
-                self.redirect('/')              # Get rid of ugly GET url      
+                self.redirect('/')              # Get rid of ugly GET url
+            elif not cor:
+                self.redirect('/')
 
         main_page = memcache.get('index')   #@UndefinedVariable
         if not main_page:
