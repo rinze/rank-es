@@ -6,29 +6,20 @@
 		<meta http-equiv="Content-type" content="text/html;charset=utf-8">		
 		<title>rank-es</title>
 		
-		<!-- Google Analytics -->
-		<script type="text/javascript">
-
-	  		 var _gaq = _gaq || [];
-	  		 _gaq.push(['_setAccount', 'UA-106085-8']);
-	 		 _gaq.push(['_trackPageview']);
-	
-	 		 (function() {
-	 		   var ga = document.createElement('script'); 
-	 		   ga.type = 'text/javascript'; 
-	 		   ga.async = true;
-	 		   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-	 		   var s = document.getElementsByTagName('script')[0]; 
-	 		   s.parentNode.insertBefore(ga, s);
-	 		 })();
-
-		</script>
-		<!-- End Google Analytics -->
+		{% include 'include_google_analytics.html' %}
+		
 	</head>
 	
 	<body>
 	<h1>rank-es</h1>
 		<div class="column">
+		<h2>Novedades</h2>
+		<p>Mientras nos modernizamos, las novedades irán apareciendo aquí 
+		arriba.</p>
+		<p>Para empezar: tenemos un <em>bookmarklet</em>. Agarren el siguiente
+		enlace (<a href="javascript:window.open('http://rank-es.appspot.com/?via=bookmarklet&url='+encodeURIComponent(location.href), '', 'width=400, height=400');">Compartir en rank-es</a>)
+		y arrástrenlo a la barra de marcadores. Y ya está, ya se pueden añadir
+		nuevos enlaces al sistema de forma sencilla.</p>
 		<h2>¿Esto qué es?</h2>
 		<p>
 		Esto es una prueba de concepto: ¿cómo sería 

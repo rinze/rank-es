@@ -4,7 +4,8 @@ import logging
 from scores import get_score
 from google.appengine.api import memcache
 from rankdb import url_in_db, insert_new_link
-from rankgenerator import generate_main_page
+from rankgenerator import generate_main_page, generate_submitted_error_page,\
+    generate_submitted_page
 from rankparser import get_title, fix_url, correct_url
 
 class InstantPage(webapp2.RequestHandler):
@@ -19,6 +20,26 @@ class InstantPage(webapp2.RequestHandler):
             self.response.out.write(url + '\n')
             self.response.out.write('Facebook: %d, Twitter: %d' % (fb, tw))
 
+class SubmittedPage(webapp2.RequestHandler):
+    
+    def get(self):
+        
+        template_values = {
+                           'url': self.request.get('url'),
+                           'via': self.request.get('via'),
+                           'score': self.request.get('score')
+                           }
+        self.response.out.write(generate_submitted_page(template_values))
+
+class SubmittedErrorPage(webapp2.RequestHandler):
+    
+    def get(self):
+        
+        template_values = {
+                           'url': self.request.get('url'),
+                           'via': self.request.get('via'),
+                           }
+        self.response.out.write(generate_submitted_error_page(template_values))
 
 class MainPage(webapp2.RequestHandler):
 
@@ -26,6 +47,8 @@ class MainPage(webapp2.RequestHandler):
 
         # Get url if provided
         url = self.request.get('url')
+        via = self.request.get('via')
+        
         
         if url and url != '':
             # Insert new link into database and regenerate front page
@@ -39,18 +62,24 @@ class MainPage(webapp2.RequestHandler):
                 logging.info('New link inserted from front page: %s (%d)' %
                               (url, score))
 
-                generate_main_page()            # Generate main page    
-                # TODO: a bit of feedback wouldn't hurt.
-                self.redirect('/')              # Get rid of ugly GET url
-            elif not cor_url:
-                self.redirect('/')
-
+                # Generate main page
+                generate_main_page()            
+                    
+                # Feedback
+                self.redirect('/submitted?via=%s&url=%s&score=%s' % 
+                              (via, url, str(score)))
+                
+            else:
+                self.redirect('/submittederror?via=%s&url=%s' % 
+                              (via, url))
+                
         main_page = memcache.get('index')   #@UndefinedVariable
         if not main_page:
             main_page = generate_main_page()
         self.response.out.write(main_page)
 
-
-   
-app = webapp2.WSGIApplication([('/', MainPage), ('/instant', InstantPage)], 
+# Define handler classes (except feedbot, which goes on his own)   
+app = webapp2.WSGIApplication([('/', MainPage), ('/instant', InstantPage), 
+                               ('/submitted', SubmittedPage), 
+                               ('/submittederror', SubmittedErrorPage)], 
                               debug=True)
