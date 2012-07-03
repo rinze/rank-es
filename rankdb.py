@@ -59,6 +59,8 @@ def get_top_links(n, update=False):
 def insert_new_link(url, title=None, log=False):
     """Inserts a new LinkEnt into the datastore. If no title is
     provided, get_title() will be called to find it.
+    Returns the link score.
+    
     """
     if not title:
         title = get_title(url)
@@ -68,6 +70,7 @@ def insert_new_link(url, title=None, log=False):
                      (url, score[0]))
     le = LinkEnt(title=title, url=url, score=score[0])
     le.put()
+    return score
 
 def delete_links(cursor):
     """Deletes all the links within the current cursor and stores them
