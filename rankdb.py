@@ -102,7 +102,7 @@ def url_in_db(url):
     if not res:
         return res
     else:
-        # If it's in the database already, it will be forever, so  let's cache
+        # If it's in the database already, it will be forever, so let's cache
         # this, just in case we have a popular URL that is going to be
         # submitted time after time
         memcache.set('lookup %s' % url, True)   #@UndefinedVariable
