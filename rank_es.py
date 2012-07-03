@@ -32,7 +32,7 @@ class MainPage(webapp2.RequestHandler):
             # Check if link already in database (current and old)
             url = fix_url(url)
             cor_url = correct_url(url)
-            if not url_in_db(url) and cor_url:
+            if cor_url and not url_in_db(url):
                 title = get_title(url)
                 logging.info('New link inserted from front page: %s' % url)
                 insert_new_link(url, title)     # Insert link into database
