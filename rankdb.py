@@ -88,9 +88,23 @@ def url_in_db(url):
     False otherwise
     
     """
+    
+    # If already in cache, return True
+    res = memcache.get('lookup %s' % url)   #@UndefinedVariable
+    if res:
+        return res
+    
     c = db.GqlQuery('SELECT * FROM LinkEnt WHERE url = :1', url)
     n1 = c.get()
     c = db.GqlQuery('SELECT * FROM OldLinkEnt WHERE url = :1', url)
     n2 = c.get()
-    return n1 is not None or n2 is not None
+    res = n1 is not None or n2 is not None
+    if not res:
+        return res
+    else:
+        # If it's in the database already, it will be forever, so  let's cache
+        # this, just in case we have a popular URL that is going to be
+        # submitted time after time
+        memcache.set('lookup %s' % url, True)   #@UndefinedVariable
+        return res
 
