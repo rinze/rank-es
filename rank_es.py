@@ -34,8 +34,11 @@ class MainPage(webapp2.RequestHandler):
             cor_url = correct_url(url)
             if cor_url and not url_in_db(url):
                 title = get_title(url)
-                logging.info('New link inserted from front page: %s' % url)
-                insert_new_link(url, title)     # Insert link into database
+                # Insert link into database
+                score, (_, _) = insert_new_link(url, title)
+                logging.info('New link inserted from front page: %s (%d)' %
+                              (url, score))
+
                 generate_main_page()            # Generate main page    
                 # TODO: a bit of feedback wouldn't hurt.
                 self.redirect('/')              # Get rid of ugly GET url
