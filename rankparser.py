@@ -11,7 +11,16 @@ def get_meneame(url):
     return result
 
 def fix_url(url):
-    """Avoid URLs that don't begin with http(s)://"""
+    """Avoid URLs that don't begin with http(s):// and makes sure
+    the fragment is removed.
+    
+    """
+        
+    # Remove the fragment, if present
+    fragment = url.find('#')
+    if fragment != -1:
+        url = url[:fragment]
+        
     if not url.startswith('http://') and not url.startswith('https://'):
         return 'http://' + url.lower()
     else:
