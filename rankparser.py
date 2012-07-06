@@ -7,7 +7,7 @@ import urllib2
 def get_meneame(url):
     """Get links from meneame.net using special names"""
     d = feedparser.parse(url)
-    result = [(e['meneame_url'], e['title']) for e in d['entries']]
+    result = [(fix_url(e['meneame_url']), e['title']) for e in d['entries']]
     return result
 
 def fix_url(url):
