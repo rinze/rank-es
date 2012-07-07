@@ -8,6 +8,8 @@ def get_meneame(url):
     """Get links from meneame.net using special names"""
     d = feedparser.parse(url)
     result = [(fix_url(e['meneame_url']), e['title']) for e in d['entries']]
+    # Avoid front pages from getting through
+    result = filter(lambda x: correct_url(x[0]), result)
     return result
 
 def fix_url(url):
