@@ -10,7 +10,7 @@ from rankconfig import cfg_links_front_page
 def generate_main_page(template_values={}):
     """"Generates the main page HTML and memcaches it"""
     
-    c = get_top_links(cfg_links_front_page)
+    c = get_top_links(cfg_links_front_page, True)
     links = [{'url':x.url, 'title':x.title, 'score': x.score,
               's_url': shortened_url(x.url), 
               'q_title': x.title.replace(' ', '+')} for x in c]

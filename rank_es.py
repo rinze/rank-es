@@ -86,7 +86,11 @@ class MainPage(webapp2.RequestHandler):
                               (url, score))
 
                 # Generate main page
-                generate_main_page()            
+                if score > memcache.get('minscore'):    #@UndefinedVariable                    
+                    generate_main_page() 
+                    logging.info('Front page updated')
+                else:
+                    logging.info('Front page not updated')           
                     
                 # Feedback
                 self.redirect('/submitted?via=%s&url=%s&score=%s' % 

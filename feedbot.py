@@ -8,6 +8,7 @@ from google.appengine.ext import db
 from datetime import datetime, timedelta
 from rankgenerator import generate_main_page
 from rankconfig import cfg_links_front_page, cfg_link_expiration_seconds
+from google.appengine.api import memcache
     
 class FeedBot(webapp2.RequestHandler):
     
@@ -29,6 +30,9 @@ class FeedBot(webapp2.RequestHandler):
                             # This is necessary as we are not working directly
                             # on the query cursor but are building a list
             min_score = links[-1].score
+            # Set min_score in memcache so we can use it to refresh the front 
+            # page only when it's necessary.
+            memcache.set('minscore', min_score)     #@UndefinedVariable
             # Everything with more than cfg_link_expiration_seconds/10
             # age and less than min_score/3 will go away.
             time_diff = today - timedelta(seconds = cfg_link_expiration_seconds/10)
