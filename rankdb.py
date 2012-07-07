@@ -26,6 +26,19 @@ class OldLinkEnt(db.Model):
     """
     url = db.StringProperty(required=True)
 
+class RSSLinkEnt(db.Model):
+    """RSS link model. Consists on:
+    - title: Page title.
+    - link: Page link.
+    - score: Link score.
+    - data: database population date. Same for all items.
+    
+    """
+    title = db.StringProperty(required=True)
+    url = db.StringProperty(required=True)
+    score = db.IntegerProperty(required=True)
+    date = db.DateTimeProperty(auto_now_add=True)
+
 def update_links(c, links, current_time):
     """Updates the LinkEnt database with the current scores.
     The links to be updated are a GQL query passed as argument (c).
@@ -111,3 +124,24 @@ def url_in_db(url):
         memcache.set('lookup %s' % url, True)   #@UndefinedVariable
         return res
 
+def populate_rss_links():
+    """Populates the RSSEnt database with 20 top links. 
+    This function is called daily. get_top_links(20) cannot
+    be used as it would have to be updated sometime and would be
+    much more difficult to control.
+    
+    """
+    
+    # First, remove whatever links we already have
+    c = RSSLinkEnt.all()
+    db.delete(c)
+    
+    # Get 20 top links (and don't get the cached copy)
+    c = get_top_links(20, True)
+    for l in c:
+        rss = RSSLinkEnt(title=l.title, url=l.url, score=l.score)
+        rss.put()
+
+def get_rss_links():
+    """Get RSS links"""
+    return RSSLinkEnt.all().order('-score')
