@@ -1,9 +1,11 @@
 # -*- coding=utf8 -*-
 import jinja2
 import os
+import PyRSS2Gen
 from google.appengine.api import memcache
 from rankdb import get_top_links
 from rankconfig import cfg_links_front_page
+
 
 def generate_main_page(template_values={}):
     """"Generates the main page HTML and memcaches it"""
@@ -60,3 +62,14 @@ def prepare_template(page, template_values):
     template = jinja_environment.get_template(page)
     page = template.render(template_values)
     return page
+
+
+def generate_rss_items(item_data):
+    """Generates RSS item data using PyRSS2Gen library"""
+    return PyRSS2Gen.RSSItem(title = '(%d) %s' % 
+                          (item_data.score, item_data.title), 
+                      link = item_data.url,
+                      guid = PyRSS2Gen.Guid(item_data.url),
+                      pubDate = item_data.date,
+                      description = item_data.url)
+    
