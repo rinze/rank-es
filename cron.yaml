@@ -3,3 +3,7 @@ cron:
   url: /feedbot
   target: feedbot
   schedule: every 60 minutes
+
+- description: populate RSS feed database
+  url: /populate_rss
+  schedule: every day 12:00
