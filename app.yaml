@@ -21,11 +21,22 @@ handlers:
 - url: /submittederror
   script: rank_es.app
   
+- url: /rss
+  script: rank_es.app
+
+- url: /populate_rss
+  script: rank_es.app
+  login: admin
+  
 - url: /tasks/feed_bot
   script: feed_bot.app
   
 - url: /styles
   static_dir: styles
+  
+- url: /images
+  static_dir: images
+  
   
 - url: /feedbot
   script: feedbot.app
