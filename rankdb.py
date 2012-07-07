@@ -3,6 +3,7 @@ from google.appengine.ext import db
 from google.appengine.api import memcache
 from scores import get_score, get_score_modifier
 from rankparser import get_title 
+from rankconfig import cfg_links_rss
 
 class LinkEnt(db.Model):
     """Link model.
@@ -125,8 +126,8 @@ def url_in_db(url):
         return res
 
 def populate_rss_links():
-    """Populates the RSSEnt database with 20 top links. 
-    This function is called daily. get_top_links(20) cannot
+    """Populates the RSSEnt database with cfg_links_rss top links. 
+    This function is called daily. get_top_links(cfg_links_rss) cannot
     be used as it would have to be updated sometime and would be
     much more difficult to control.
     
@@ -136,8 +137,8 @@ def populate_rss_links():
     c = RSSLinkEnt.all()
     db.delete(c)
     
-    # Get 20 top links (and don't get the cached copy)
-    c = get_top_links(20, True)
+    # Get cfg_links_rss top links (and don't get the cached copy)
+    c = get_top_links(cfg_links_rss, True)
     for l in c:
         rss = RSSLinkEnt(title=l.title, url=l.url, score=l.score)
         rss.put()

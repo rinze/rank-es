@@ -52,7 +52,7 @@ class RSS(webapp2.RequestHandler):
         # Get RSS links
         links = map(generate_rss_items, get_rss_links())
         rss_data = PyRSS2Gen.RSS2(
-                    title = 'rank-es: 20 mejores enlaces diarios',                            
+                    title = 'rank-es: mejores enlaces diarios',                            
                     link = 'http://rank-es.appspot.com', 
                     description = 'Actualizado diariamente. http://rank-es.appspot.com',
                     lastBuildDate = links[0].pubDate,
