@@ -3,10 +3,12 @@ import webapp2
 import logging
 from scores import get_score
 from google.appengine.api import memcache
-from rankdb import url_in_db, insert_new_link
+from rankdb import url_in_db, insert_new_link, get_rss_links, \
+    populate_rss_links
 from rankgenerator import generate_main_page, generate_submitted_error_page,\
-    generate_submitted_page
+    generate_submitted_page, generate_rss_items
 from rankparser import get_title, fix_url, correct_url
+import PyRSS2Gen
 
 class InstantPage(webapp2.RequestHandler):
     """Class that handles instant queries"""
@@ -40,6 +42,27 @@ class SubmittedErrorPage(webapp2.RequestHandler):
                            'via': self.request.get('via'),
                            }
         self.response.out.write(generate_submitted_error_page(template_values))
+
+
+
+class RSS(webapp2.RequestHandler):
+    """Generates RSS data"""
+    def get(self):
+        
+        # Get RSS links
+        links = map(generate_rss_items, get_rss_links())
+        rss_data = PyRSS2Gen.RSS2(
+                    title = 'rank-es: 20 mejores enlaces diarios',                            
+                    link = 'http://rank-es.appspot.com', 
+                    description = 'Actualizado diariamente. http://rank-es.appspot.com',
+                    lastBuildDate = links[0].pubDate,
+                    items = links)
+        self.response.out.write(rss_data.to_xml(encoding="utf-8"))
+        
+class RSSPopulate(webapp2.RequestHandler):
+    """Populates RSS database via daily cron job"""
+    def get(self):
+        populate_rss_links()
 
 class MainPage(webapp2.RequestHandler):
 
@@ -79,7 +102,10 @@ class MainPage(webapp2.RequestHandler):
         self.response.out.write(main_page)
 
 # Define handler classes (except feedbot, which goes on his own)   
-app = webapp2.WSGIApplication([('/', MainPage), ('/instant', InstantPage), 
+app = webapp2.WSGIApplication([('/', MainPage), 
+                               ('/instant', InstantPage), 
                                ('/submitted', SubmittedPage), 
-                               ('/submittederror', SubmittedErrorPage)], 
+                               ('/submittederror', SubmittedErrorPage),
+                               ('/rss', RSS),
+                               ('/populate_rss', RSSPopulate)], 
                               debug=True)
