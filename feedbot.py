@@ -81,12 +81,4 @@ class FeedBot(webapp2.RequestHandler):
         logging.info('Main page generated')
         
 
-# TODO: this bot should publish, at regular intervals, the most relevant
-# news, either from the front page or from any of the categories.
-# Further database tweaking may be needed.
-# For now, let's just write a reminder that this shall be done.
-# The Twitter account rank_es has been reserved for this purpose (by @rinze).
-class TwitterBot():
-    pass
-   
 app = webapp2.WSGIApplication([('/feedbot', FeedBot)], debug=True)
