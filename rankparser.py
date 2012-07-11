@@ -38,7 +38,12 @@ def get_title(url):
     # HTMLParser would be a better choice.
     
     try:
-        data = urllib2.urlopen(url).read()
+        # Read data in chunks of 500 bytes. Don't need the whole
+        # HTML file, just the header until the closing title tag.
+        urlo = urllib2.urlopen(url)
+        data = ''
+        while data.lower().find('</title>') == -1:
+            data += urlo.read(500)
         
         # Try to get title
         ptitle = re.compile('<title>(.*?)</title>', re.DOTALL | re.M)
